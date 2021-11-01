@@ -32,40 +32,72 @@ S = \sum_{n=1}^\infty \frac{1}{n} = \lim_{k \to \infty} \sum_{n = 1}^k \frac{1}{
 \]
 We can construct a table of values for the first 101 partial sums of S and see if they seem to be approaching a limit.
 Instead of viewing the whole table, we will only view every 10th entry, as we did with the lab on sequences.
-Below we use the {\texttt Sum} command to make a function \verb|s[n_]| that computes the $n^{\textnormal{th}}$ partial sum.
+Below we will make a function \verb|s(n)| that computes the $n^{\textnormal{th}}$ partial sum.
 \begin{codebox}
-s[n_] := Sum[1/k,{k,1,n}];
-vals = Table[{n,s[n]},{n,1,101}];
-vals[[;; ;; 10]] // N // TableForm
+def s(n):
+	# do a partial sum of the first n values of 
+	# \sum 1 / k
+	k_values = list(range(1, n))
+	partial_sum = sum([1 / k for k in k_values])
+	return partial_sum
+
+def print_table_sum(n_values, sum_values, step):
+	# helper function which prints a pretty table
+	print("n \t sum to n")
+	print("----------------------")
+	for index in range(0, len(n_values), step):
+		print(n_values[index], "\t", sum_values[index])
 \end{codebox}
 
-As a shortcut if we only need every 10th entry of the above table, we can ask Mathematica to only generate those entries, instead of generating all of them and then extracting every 10th:
-\begin{codebox}
-vals2 = Table[{n,s[n]},{n,1,101,10}];
-vals2 // N // TableForm
-\end{codebox}
 Another way to see if a sequence may be converging or diverging is to plot the sequence of partial sums using {\texttt ListPlot}. We can do this with the first 101 terms of the above sequence:
 \begin{codebox}
-	ListPlot[vals]
+\# only put imports at the beggining of a python file!
+import matplotlib.pyplot as plt
+
+# plot
+plt.plot(n_values, sum_values, ".")
+
+# pretty it up
+plt.xlabel("n")
+plt.ylabel("s(n)")
+
+# display the plot
+plt.show()
 \end{codebox}
 Does this plot look like a familiar function?
 Based on the plot, does the sequence of partial sums appear to be converging or diverging?
 
-Finally, we can have Mathematica compute the sum directly:
+Python alone does not have the tools to determine if the sum
+converges exactly.  
+The \texttt{Sympy} library has the tools needed to do this,
+and gives Python the same capabilities as Mathematica
 \begin{codebox}
-	s[Infinity]
+\# Again, only have imports at the top of a python file
+# this imports the symbolic k, which can be used as a variable
+from sympy.abc import k
+# import summations, and oo is infinity
+from sympy import Sum, oo
+
+a_k = 1 / k
+# create an expression for the sum, notice the capital "S" in "Sum"
+sum_expression = Sum(a_k, (k, 1, oo))
+# doit() actually performs the operation through computation
+print(sum_expression.doit())
+
 \end{codebox}
-which gives us an error stating that the series does not converge.
+which gives us "oo," indicating the series goes to infinity, 
+and therefore does not converge.
+
+To see everything put together, see the python file \texttt{template.py}.
+To install packages in the Thonny IDE, see
+\url{https://www.youtube.com/watch?v=Oo-B98WWre_8}.
 
 \newpage
 \section*{Lab Questions}
 \begin{Remark}[title={General Debugging Tip}]
 	\noindent
-	If your computer is taking too long and you want to cancel a calculation, from the menu bar follow
-	\menu{Evaluation>Quit Kernel>Local}.
-	This will shut off Mathematica's ability to perform any computations, so in order to run more code you will need to turn it back on.
-	To do this, go to \menu{Evaluation>Start Kernel>Local}.
-	When you turn the kernel off and on again, Mathematica also forgets the definitions of any variables and functions, so you will need to execute again any initializing code that you want to use later on in your document before Mathematica will recognize it.
+	If your computer is taking too long and you want to cancel a calculation, from the menu bar follow, simply push "Ctrl + C." In Python this terminates
+	a command which is taking too long.
 \end{Remark}
 
 \subsection*{Question 1(a)}
@@ -115,26 +147,12 @@ Take your best guess at these questions (no right or wrong answers here!).
 Let us look more carefully at the last series in Question (1). You should have found that the series converged to $e \approx 2.718$. This is a well-known series we will revisit later in the semester. Use the sample code below as a starting point to answer the questions.
 \vspace{.5em}
 
-\begin{codebox}
-	t[n_] := (* write the code for the partial sum of the third series here *)
-	errors = {};
-	exact = (* write the exact value the series converges to here *)
-	For[
-	m = 1,
-	m <= 10,
-	m++,
-	errors = Append[errors, Abs[t[m] - exact]]
-	]
-	(* Output the table of error terms here--use approximate (decimal) values *) 
-\end{codebox}
 
 \begin{enumerate}[label=\roman*)]
-	\item Modify the sample code. It helps you define an empty list called \verb|errors| and run an experiment for values of $n$ ranging from 1 to 10. \par
-	\textbf{Recall}: In Mathematica comments look like \verb|(* this is a comment *)| and you will need to replace them with appropriate code.
-	
-	When you are finished, \verb|errors| should contain 10 numbers, representing the difference between the $n^{\textnormal{th}}$ partial sum and $e$.
-	
-	\item Use the command \verb|ListLogLogPlot| to plot the errors on a $\log-\log$ plot. What do you notice?
+	\item Modify the code in \verb|sum_errors.py|. It helps you to 
+	compute an error list for a partial sum against a known exact value
+	for the infinite sum.
+	\item Use the command \verb|plt.loglog| to plot the errors on a $\log-\log$ plot. What do you notice?
 	
 	\item Does evaluating the partial sums seem to be a good way to find an approximation to $e$?
 	
