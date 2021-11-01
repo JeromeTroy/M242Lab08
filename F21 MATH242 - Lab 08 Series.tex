@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+
+\newcommand{\labNumber}{08}
+\newcommand{\labTitle}{Series}
+\usepackage{multicol}
+\input{top.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Introduction}
+
+Determining if a sum
+
+\[
+\sum_{n=0}^\infty a_n
+\]
+
+converges can be re-phrased as determining if the sequence of partial sums
+\[
+\left\{
+\sum_{n=0}^0 a_n,
+\sum_{n=0}^1 a_n,
+\ldots,
+\sum_{n=0}^N a_n,
+\ldots
+\right\}
+\]
+converges to a limit. Consider, for example, the infinite series
+\[
+S = \sum_{n=1}^\infty \frac{1}{n} = \lim_{k \to \infty} \sum_{n = 1}^k \frac{1}{n}.
+\]
+We can construct a table of values for the first 101 partial sums of S and see if they seem to be approaching a limit.
+Instead of viewing the whole table, we will only view every 10th entry, as we did with the lab on sequences.
+Below we use the {\texttt Sum} command to make a function \verb|s[n_]| that computes the $n^{\textnormal{th}}$ partial sum.
+\begin{codebox}
+s[n_] := Sum[1/k,{k,1,n}];
+vals = Table[{n,s[n]},{n,1,101}];
+vals[[;; ;; 10]] // N // TableForm
+\end{codebox}
+
+As a shortcut if we only need every 10th entry of the above table, we can ask Mathematica to only generate those entries, instead of generating all of them and then extracting every 10th:
+\begin{codebox}
+vals2 = Table[{n,s[n]},{n,1,101,10}];
+vals2 // N // TableForm
+\end{codebox}
+Another way to see if a sequence may be converging or diverging is to plot the sequence of partial sums using {\texttt ListPlot}. We can do this with the first 101 terms of the above sequence:
+\begin{codebox}
+	ListPlot[vals]
+\end{codebox}
+Does this plot look like a familiar function?
+Based on the plot, does the sequence of partial sums appear to be converging or diverging?
+
+Finally, we can have Mathematica compute the sum directly:
+\begin{codebox}
+	s[Infinity]
+\end{codebox}
+which gives us an error stating that the series does not converge.
+
+\newpage
+\section*{Lab Questions}
+\begin{Remark}[title={General Debugging Tip}]
+	\noindent
+	If your computer is taking too long and you want to cancel a calculation, from the menu bar follow
+	\menu{Evaluation>Quit Kernel>Local}.
+	This will shut off Mathematica's ability to perform any computations, so in order to run more code you will need to turn it back on.
+	To do this, go to \menu{Evaluation>Start Kernel>Local}.
+	When you turn the kernel off and on again, Mathematica also forgets the definitions of any variables and functions, so you will need to execute again any initializing code that you want to use later on in your document before Mathematica will recognize it.
+\end{Remark}
+
+\subsection*{Question 1(a)}
+
+For each of the following series, perform the steps outlined below.
+\[
+\sum_{k=1}^\infty \frac{1}{k^2},
+\qquad\qquad
+\sum_{k=1}^\infty \left(\frac{\ln(k)}{k}\right)^2,
+\qquad\qquad
+\sum_{k=0}^\infty \frac{1}{k!}
+\]
+\vspace{.5em}
+
+\begin{tabular}{c}
+	%\hline
+	\parbox{.97\textwidth}{\begin{multicols}{2}
+			\begin{enumerate}[label=\roman*)]
+				\item Define a sequence of partial sums. 
+				\item Make an abridged table of values.
+				\item (List)Plot the partial sums.
+				\item Evaluate the sum of the series. \columnbreak
+				\item Considering the sequence of terms $a_k$ so that the series is $\displaystyle\sum_{k}^{\infty}a_k$, determine if $a_k$ converges or diverges, and if it converges, find its limit. (Note: you can answer this question by your result in the previous step! Why?)
+			\end{enumerate}
+	\end{multicols}}
+	%\\ \hline
+\end{tabular}
+\vspace{.5em}
+
+\begin{WarningBox}[title={The Journey of an Infinite Sum Begins with a Single Index . . .}]
+	\noindent
+	Make sure you are careful with the starting value of the last series--the sum starts at zero instead of one.
+\end{WarningBox}
+
+\subsection*{Question 1(b)}
+
+Take your best guess at these questions (no right or wrong answers here!).
+
+\begin{enumerate}[label=\roman*)]
+	\item Looking at the plots and lists, which series appears to be converging most quickly? 
+	
+	\item Which one appears to be converging most slowly? 
+\end{enumerate}
+
+\subsection*{Question 2}
+
+Let us look more carefully at the last series in Question (1). You should have found that the series converged to $e \approx 2.718$. This is a well-known series we will revisit later in the semester. Use the sample code below as a starting point to answer the questions.
+\vspace{.5em}
+
+\begin{codebox}
+	t[n_] := (* write the code for the partial sum of the third series here *)
+	errors = {};
+	exact = (* write the exact value the series converges to here *)
+	For[
+	m = 1,
+	m <= 10,
+	m++,
+	errors = Append[errors, Abs[t[m] - exact]]
+	]
+	(* Output the table of error terms here--use approximate (decimal) values *) 
+\end{codebox}
+
+\begin{enumerate}[label=\roman*)]
+	\item Modify the sample code. It helps you define an empty list called \verb|errors| and run an experiment for values of $n$ ranging from 1 to 10. \par
+	\textbf{Recall}: In Mathematica comments look like \verb|(* this is a comment *)| and you will need to replace them with appropriate code.
+	
+	When you are finished, \verb|errors| should contain 10 numbers, representing the difference between the $n^{\textnormal{th}}$ partial sum and $e$.
+	
+	\item Use the command \verb|ListLogLogPlot| to plot the errors on a $\log-\log$ plot. What do you notice?
+	
+	\item Does evaluating the partial sums seem to be a good way to find an approximation to $e$?
+	
+\end{enumerate}
+
+\subsection*{Question 3}
+
+\begin{enumerate}[label=\roman*)]
+	\item Repeat Question 2 with the series
+	\[
+	\sum_{k=1}^\infty \frac{1}{k^2}.
+	\]
+	The sum of this series is known to be $\displaystyle \frac{\pi^2}{6}$, so this should be used as your value for \verb|exact|.
+	
+	It actually takes a lot of effort to prove the series converges to this value (you can read about the Basel Problem on Wikipedia if you are interested---and it illustrates why you are only asked to determine convergence or divergence for most series, not their limits).
+	
+	\item Does this series converge as quickly as the one in Question 2? Make sure your sum starts at $k = 1$ instead of $k = 0$.
+\end{enumerate}
+
+\end{document}

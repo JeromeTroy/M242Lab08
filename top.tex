@@ -1,0 +1,81 @@
+\usepackage{amsmath,amssymb,tikz,pgfplots,url}
+\usepackage[colorlinks]{hyperref}
+\pgfplotsset{compat=1.14}
+\usepackage%
+  [%
+    paperheight=11in,%
+    paperwidth=8.5in,%
+    top=1in,%
+    bottom=1in,%
+    right=1in,%
+    left=1in
+  ]{geometry}
+\usetikzlibrary{arrows.meta}
+\usepackage{menukeys}
+\usepackage{enumitem}
+
+\setlength \parindent{0pt}
+
+%%%%%% All the tcolorboxes
+%%%% Used for all those fancy boxed environments.
+\usepackage[most]{tcolorbox}
+
+\newtcblisting{codebox}[1][]{%
+          listing only,
+          listing options={
+            style=tcblatex,
+%            numbers=left,
+%            numberstyle=\tiny\color{red!75!black},
+            escapechar=|
+          },
+          coltitle=white,%
+          colback=green!5!white,%
+          colframe=green!75!black,%
+          fonttitle=\bfseries,%
+          before upper={\parindent0pt},%
+          before skip=5mm,
+          after skip=5mm,
+          #1}
+
+\newtcolorbox{WarningBox}[1][]{%
+          coltitle=blue!80!white,%
+          colback=red!20!white,%
+          colframe=red!50!white,%
+          fonttitle=\bfseries,%
+          before upper={\parindent15pt},%
+          title={Caution},
+          #1,
+}
+\newtcolorbox{Remark}[1][]{%
+          coltitle=white,%
+          colback=magenta!5!white,%
+          colframe=magenta!75!black,%
+          fonttitle=\bfseries,%
+          before upper={\parindent15pt},
+          title=Remark,
+          #1
+}
+
+\begin{document}
+
+{\centering
+\Large{Math242 Lab \labNumber: \labTitle}
+\par}
+
+\vspace*{5mm}
+
+\begin{Remark}[title={Lab Instructions}]
+\noindent
+Complete the following lab examples and exercises.
+
+\noindent
+Make sure each question is clearly labeled and all questions are answered completely.
+
+\noindent
+\textbf{Submit both the Mathematica .nb file and a .pdf file} with the titles \vspace{.5em}
+
+{\centering lastnameLab\labNumber.nb and lastnameLab\labNumber.pdf\par}\vspace{.5em}
+\noindent 
+on Canvas before the deadline.
+Late submissions will not be accepted.
+\end{Remark}
