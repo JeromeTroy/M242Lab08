@@ -22,7 +22,7 @@ converges can be re-phrased as determining if the sequence of partial sums
 \sum_{n=0}^0 a_n,
 \sum_{n=0}^1 a_n,
 \ldots,
-\sum_{n=0}^N a_n,
+\sum_{n=0}^{S_N} a_n,
 \ldots
 \right\}
 \]
@@ -49,7 +49,7 @@ def print_table_sum(n_values, sum_values, step):
 		print(n_values[index], "\t", sum_values[index])
 \end{codebox}
 
-Another way to see if a sequence may be converging or diverging is to plot the sequence of partial sums using {\texttt ListPlot}. We can do this with the first 101 terms of the above sequence:
+Another way to see if a sequence may be converging or diverging is to plot the sequence of partial sums using matplotlib's {\texttt plot}. We can do this with the first 101 terms of the above sequence:
 \begin{codebox}
 \# only put imports at the beggining of a python file!
 import matplotlib.pyplot as plt
@@ -67,11 +67,9 @@ plt.show()
 Does this plot look like a familiar function?
 Based on the plot, does the sequence of partial sums appear to be converging or diverging?
 
-Python alone does not have the tools to determine if the sum
-converges exactly.  
-The \texttt{Sympy} library has the tools needed to do this,
-and gives Python the same capabilities as Mathematica
-\begin{codebox}
+Core Python does not understand symbolic math, but the 
+SymPy package gives it many of the same capabilities as Mathematica.
+\begin{codebox} 
 \# Again, only have imports at the top of a python file
 # this imports the symbolic k, which can be used as a variable
 from sympy.abc import k
@@ -94,15 +92,22 @@ To install packages in the Thonny IDE, see
 
 \newpage
 \section*{Lab Questions}
-\begin{Remark}[title={General Debugging Tip}]
+
+Questions 1, 2, and 3 can all be run in one Python file.  
+However, it is ultimately up to you how you would like to organize your work.
+
+\begin{Remark}[title={General Debugging Tip in Python}]
 	\noindent
-	If your computer is taking too long and you want to cancel a calculation, from the menu bar follow, simply push "Ctrl + C." In Python this terminates
+	If your computer is taking too long and you want to cancel a calculation, simply push "Ctrl + C." In Python this terminates
 	a command which is taking too long.
 \end{Remark}
 
-\subsection*{Question 1(a)}
+\subsection*{Question 1}
 
 For each of the following series, perform the steps outlined below.
+An example can be seen in either 
+\texttt{template.py} or \texttt{generalized\textunderscore template.py}.
+It is fine if all three tes cases are in the same Python file.
 \[
 \sum_{k=1}^\infty \frac{1}{k^2},
 \qquad\qquad
@@ -117,10 +122,14 @@ For each of the following series, perform the steps outlined below.
 	\parbox{.97\textwidth}{\begin{multicols}{2}
 			\begin{enumerate}[label=\roman*)]
 				\item Define a sequence of partial sums. 
-				\item Make an abridged table of values.
-				\item (List)Plot the partial sums.
-				\item Evaluate the sum of the series. \columnbreak
-				\item Considering the sequence of terms $a_k$ so that the series is $\displaystyle\sum_{k}^{\infty}a_k$, determine if $a_k$ converges or diverges, and if it converges, find its limit. (Note: you can answer this question by your result in the previous step! Why?)
+				\item Use the function \texttt{print\textunderscore table}
+						to print an abbridged table of values.
+				\item Plot the partial sums.
+				\item Use SymPy to evaluate the exact sum of the series.
+						Does each series converge or diverge?
+						(Put the answer in either a comment or a
+						print statement, e.g. 
+						\texttt{print("This series converges to e")}).
 			\end{enumerate}
 	\end{multicols}}
 	%\\ \hline
@@ -132,19 +141,9 @@ For each of the following series, perform the steps outlined below.
 	Make sure you are careful with the starting value of the last series--the sum starts at zero instead of one.
 \end{WarningBox}
 
-\subsection*{Question 1(b)}
-
-Take your best guess at these questions (no right or wrong answers here!).
-
-\begin{enumerate}[label=\roman*)]
-	\item Looking at the plots and lists, which series appears to be converging most quickly? 
-	
-	\item Which one appears to be converging most slowly? 
-\end{enumerate}
-
 \subsection*{Question 2}
 
-Let us look more carefully at the last series in Question (1). You should have found that the series converged to $e \approx 2.718$. This is a well-known series we will revisit later in the semester. Use the sample code below as a starting point to answer the questions.
+Let us look more carefully at the last series in Question (1). You should have found that the series converged to $e \approx 2.718$. This is a well-known series we will revisit later in the semester.
 \vspace{.5em}
 
 
@@ -155,6 +154,7 @@ Let us look more carefully at the last series in Question (1). You should have f
 	\item Use the command \verb|plt.loglog| to plot the errors on a $\log-\log$ plot. What do you notice?
 	
 	\item Does evaluating the partial sums seem to be a good way to find an approximation to $e$?
+			Again, put your answer in either a comment or print statement.
 	
 \end{enumerate}
 
@@ -167,9 +167,66 @@ Let us look more carefully at the last series in Question (1). You should have f
 	\]
 	The sum of this series is known to be $\displaystyle \frac{\pi^2}{6}$, so this should be used as your value for \verb|exact|.
 	
-	It actually takes a lot of effort to prove the series converges to this value (you can read about the Basel Problem on Wikipedia if you are interested---and it illustrates why you are only asked to determine convergence or divergence for most series, not their limits).
+	It actually takes a lot of effort to prove the series converges to this value (you can read about the 
+	\href{https://en.wikipedia.org/wiki/Basel_problem}
+	{Basel Problem on Wikipedia} if you are interested---and it illustrates why you are only asked to determine convergence or divergence for most series, not their limits).
 	
 	\item Does this series converge as quickly as the one in Question 2? Make sure your sum starts at $k = 1$ instead of $k = 0$.
 \end{enumerate}
 
+\subsection*{Question 4}
+
+For this question we will build a new python file/module.
+
+We wish to sum the following series:
+	\[
+			\sum_{n=2}^\infty \frac{1}{\ln(n) \cdot 2^n}
+	.\] 
+	Since it is not possible to do by hand, we will instead approximate
+	the value of the series.
+
+\begin{enumerate}[label=\roman*)]
+  
+	
+	\item For large enough $S_N$, each term in the series 
+			can be compared to a geometric series.
+			\[
+					\sum_{n=S_N}^\infty \frac{1}{\ln(n) \cdot 2^n}
+					\leq \sum_{n=S_N}^\infty r^n = F(S_N)
+			.\] 
+			So determine the appropriate $r$ and $F(S_N)$.
+
+	\item Given a value $\epsilon$ for the tolerance (allowed error)
+			we wish to determine the series value 
+			to within the allowable error. This will be done by
+			\[\begin{split}
+					\sum_{n=2}^\infty \frac{1}{\ln(n) \cdot 2^n} 
+					& = 
+					\sum_{n=2}^{S_N-1} \frac{1}{\ln(n) \cdot 2^n} + 
+					\sum_{n=S_N}^\infty \frac{1}{\ln(n) \cdot 2^n} \\
+					& \leq 
+					\sum_{n=2}^{S_N-1} \frac{1}{\ln(n) \cdot 2^n} + 
+					\sum_{n=S_N}^\infty r^n \\
+					& =
+					\sum_{n=2}^{S_N-1} \frac{1}{\ln(n) \cdot 2^n} + 
+					F(S_N) \\
+					& = \sum_{n=2}^{S_N-1} \frac{1}{\ln(n) \cdot 2^n} + 
+					\epsilon, \quad \text{provided} \quad 
+					F(S_N) \leq \epsilon
+			\end{split}.\] 
+		So given $\epsilon$, solve for $S_N$, and record this expression,
+		we will use it in the next part.
+
+	\item Write a function which can take a tolerance, $\epsilon$, and 
+			returns the approximate value of the infinte series by
+			summing the first $S_N$ terms.
+			Your function should use the given $\epsilon$ and compute 
+			the appropriate $S_N$.  It should then evaluate
+			and return the value of 
+			$\sum_{n=2}^{S_N} \frac{1}{\ln(n) \cdot 2^n}$.
+
+
+			To verify your answer, you can either use Mathematica or 
+			Sympy to sum the entire series, and compare your answers.
+\end{enumerate}
 \end{document}
