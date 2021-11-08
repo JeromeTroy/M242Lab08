@@ -59,7 +59,7 @@ partial_sums_list = []
 for n in n_values:
     partial_sums_list.append(partial_sum_general(a_k, n))
 
-print_table_sum(n_values, partial_sums_list, 10)
+print_table(n_values, partial_sums_list, 10)
 
 # plotting
 plt.plot(n_values, partial_sums_list, ".")
@@ -90,4 +90,4 @@ starting_k_value = 1
 partial_sum_errors = compute_sum_errors(exact, b_k, starting_k_value, max_n_value)
 
 n_list = list(range(starting_k_value, max_n_value))
-print_table_sum(n_list, partial_sum_errors, 5)
+print_table(n_list, partial_sum_errors, 5)
